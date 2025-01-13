@@ -1,0 +1,98 @@
+{
+  "project_info": {
+    "project_number": "621282972003",
+    "project_id": "shipping-47ce9",
+    "storage_bucket": "shipping-47ce9.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:621282972003:android:dbaf27273ae0ebe6480356",
+        "android_client_info": {
+          "package_name": "com.mycompany.gentoo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "621282972003-ke0kcd8i4n0hptsd1q4vuuldodfi6gij.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mycompany.gentoo",
+            "certificate_hash": "9bbb3186b2189ef16d8f272bdab59362c395cbb4"
+          }
+        },
+        {
+          "client_id": "621282972003-2tjhgt4jr87f65333tdeqh1tgeo0kvq9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDBeDEoVcD2gjw4XyKncMXwi55v97eW2ZM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "621282972003-2tjhgt4jr87f65333tdeqh1tgeo0kvq9.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "621282972003-8h7gclv03no6bfue5m7uf1umpdb6upkd.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.mycompany.gentoo"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:621282972003:android:c33ec8a03e354b66480356",
+        "android_client_info": {
+          "package_name": "com.mycompany.gentoodelivery"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "621282972003-5t4g1iltturcocesj66jha1sega2ocg0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mycompany.gentoodelivery",
+            "certificate_hash": "9bbb3186b2189ef16d8f272bdab59362c395cbb4"
+          }
+        },
+        {
+          "client_id": "621282972003-2tjhgt4jr87f65333tdeqh1tgeo0kvq9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDBeDEoVcD2gjw4XyKncMXwi55v97eW2ZM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "621282972003-2tjhgt4jr87f65333tdeqh1tgeo0kvq9.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "621282972003-8h7gclv03no6bfue5m7uf1umpdb6upkd.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.mycompany.gentoo"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
