@@ -3,31 +3,18 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'package:shared_preferences/shared_preferences.dart';
-
-const kThemeModeKey = '__theme_mode__';
-SharedPreferences? _prefs;
+enum DeviceSize {
+  mobile,
+  tablet,
+  desktop,
+}
 
 abstract class FlutterFlowTheme {
-  static Future initialize() async =>
-      _prefs = await SharedPreferences.getInstance();
-  static ThemeMode get themeMode {
-    final darkMode = _prefs?.getBool(kThemeModeKey);
-    return darkMode == null
-        ? ThemeMode.system
-        : darkMode
-            ? ThemeMode.dark
-            : ThemeMode.light;
-  }
-
-  static void saveThemeMode(ThemeMode mode) => mode == ThemeMode.system
-      ? _prefs?.remove(kThemeModeKey)
-      : _prefs?.setBool(kThemeModeKey, mode == ThemeMode.dark);
+  static DeviceSize deviceSize = DeviceSize.mobile;
 
   static FlutterFlowTheme of(BuildContext context) {
-    return Theme.of(context).brightness == Brightness.dark
-        ? DarkModeTheme()
-        : LightModeTheme();
+    deviceSize = getDeviceSize(context);
+    return LightModeTheme();
   }
 
   @Deprecated('Use primary instead')
@@ -53,6 +40,15 @@ abstract class FlutterFlowTheme {
   late Color warning;
   late Color error;
   late Color info;
+
+  late Color black20;
+  late Color lightGray;
+  late Color textfiled;
+  late Color primaryLight;
+  late Color black40;
+  late Color black30;
+  late Color black10;
+  late Color borderColor;
 
   @Deprecated('Use displaySmallFamily instead')
   String get title1Family => displaySmallFamily;
@@ -114,7 +110,22 @@ abstract class FlutterFlowTheme {
   String get bodySmallFamily => typography.bodySmallFamily;
   TextStyle get bodySmall => typography.bodySmall;
 
-  Typography get typography => ThemeTypography(this);
+  Typography get typography => {
+        DeviceSize.mobile: MobileTypography(this),
+        DeviceSize.tablet: TabletTypography(this),
+        DeviceSize.desktop: DesktopTypography(this),
+      }[deviceSize]!;
+}
+
+DeviceSize getDeviceSize(BuildContext context) {
+  final width = MediaQuery.sizeOf(context).width;
+  if (width < 479) {
+    return DeviceSize.mobile;
+  } else if (width < 991) {
+    return DeviceSize.tablet;
+  } else {
+    return DeviceSize.desktop;
+  }
 }
 
 class LightModeTheme extends FlutterFlowTheme {
@@ -125,22 +136,31 @@ class LightModeTheme extends FlutterFlowTheme {
   @Deprecated('Use tertiary instead')
   Color get tertiaryColor => tertiary;
 
-  late Color primary = const Color(0xFFD41E27);
-  late Color secondary = const Color(0xFFFF6A73);
-  late Color tertiary = const Color(0xFF0299FF);
-  late Color alternate = const Color(0xFFE3E7ED);
+  late Color primary = const Color(0xFFEB1D26);
+  late Color secondary = const Color(0xFFF4FAEB);
+  late Color tertiary = const Color(0xFFEE8B60);
+  late Color alternate = const Color(0xFFE0E3E7);
   late Color primaryText = const Color(0xFF14181B);
-  late Color secondaryText = const Color(0xFF677681);
+  late Color secondaryText = const Color(0xFF57636C);
   late Color primaryBackground = const Color(0xFFF1F4F8);
   late Color secondaryBackground = const Color(0xFFFFFFFF);
-  late Color accent1 = const Color(0x4CF83B46);
-  late Color accent2 = const Color(0x4CFF6A73);
-  late Color accent3 = const Color(0x4D0299FF);
-  late Color accent4 = const Color(0xB2FFFFFF);
-  late Color success = const Color(0xFF6BBD78);
-  late Color warning = const Color(0xFFEC9C4B);
-  late Color error = const Color(0xFFF83B46);
-  late Color info = const Color(0xFFFFFFFF);
+  late Color accent1 = const Color(0x4C4B39EF);
+  late Color accent2 = const Color(0x4D39D2C0);
+  late Color accent3 = const Color(0x4DEE8B60);
+  late Color accent4 = const Color(0xCCFFFFFF);
+  late Color success = const Color(0xFF249689);
+  late Color warning = const Color(0xFFF9CF58);
+  late Color error = const Color(0xFFFF3E3E);
+  late Color info = const Color(0xFFDCDCDC);
+
+  late Color black20 = const Color(0xFFDCDCDC);
+  late Color lightGray = const Color(0xFFF8F8F8);
+  late Color textfiled = const Color(0xFF696969);
+  late Color primaryLight = const Color(0xFFF4FAEB);
+  late Color black40 = const Color(0xFF696969);
+  late Color black30 = const Color(0xFFC0C0C0);
+  late Color black10 = const Color(0xFFF4F4F4);
+  late Color borderColor = const Color(0xFFDBDBDB);
 }
 
 abstract class Typography {
@@ -176,141 +196,340 @@ abstract class Typography {
   TextStyle get bodySmall;
 }
 
-class ThemeTypography extends Typography {
-  ThemeTypography(this.theme);
+class MobileTypography extends Typography {
+  MobileTypography(this.theme);
 
   final FlutterFlowTheme theme;
 
-  String get displayLargeFamily => 'Sora';
-  TextStyle get displayLarge => GoogleFonts.getFont(
-        'Sora',
+  String get displayLargeFamily => 'Satoshi';
+  TextStyle get displayLarge => TextStyle(
+        fontFamily: 'Satoshi',
         color: theme.primaryText,
         fontWeight: FontWeight.normal,
-        fontSize: 56.0,
+        fontSize: 64.0,
       );
-  String get displayMediumFamily => 'Sora';
-  TextStyle get displayMedium => GoogleFonts.getFont(
-        'Sora',
+  String get displayMediumFamily => 'Satoshi';
+  TextStyle get displayMedium => TextStyle(
+        fontFamily: 'Satoshi',
         color: theme.primaryText,
         fontWeight: FontWeight.normal,
         fontSize: 44.0,
       );
-  String get displaySmallFamily => 'Sora';
-  TextStyle get displaySmall => GoogleFonts.getFont(
-        'Sora',
+  String get displaySmallFamily => 'Satoshi';
+  TextStyle get displaySmall => TextStyle(
+        fontFamily: 'Satoshi',
         color: theme.primaryText,
-        fontWeight: FontWeight.w500,
+        fontWeight: FontWeight.w600,
         fontSize: 36.0,
       );
-  String get headlineLargeFamily => 'Sora';
-  TextStyle get headlineLarge => GoogleFonts.getFont(
-        'Sora',
+  String get headlineLargeFamily => 'Satoshi';
+  TextStyle get headlineLarge => TextStyle(
+        fontFamily: 'Satoshi',
         color: theme.primaryText,
         fontWeight: FontWeight.w600,
         fontSize: 32.0,
       );
-  String get headlineMediumFamily => 'Sora';
-  TextStyle get headlineMedium => GoogleFonts.getFont(
-        'Sora',
+  String get headlineMediumFamily => 'Satoshi';
+  TextStyle get headlineMedium => TextStyle(
+        fontFamily: 'Satoshi',
         color: theme.primaryText,
         fontWeight: FontWeight.normal,
-        fontSize: 32.0,
+        fontSize: 24.0,
       );
-  String get headlineSmallFamily => 'Sora';
-  TextStyle get headlineSmall => GoogleFonts.getFont(
-        'Sora',
+  String get headlineSmallFamily => 'Satoshi';
+  TextStyle get headlineSmall => TextStyle(
+        fontFamily: 'Satoshi',
         color: theme.primaryText,
         fontWeight: FontWeight.w500,
         fontSize: 24.0,
       );
-  String get titleLargeFamily => 'Sora';
-  TextStyle get titleLarge => GoogleFonts.getFont(
-        'Sora',
+  String get titleLargeFamily => 'Satoshi';
+  TextStyle get titleLarge => TextStyle(
+        fontFamily: 'Satoshi',
         color: theme.primaryText,
         fontWeight: FontWeight.w500,
         fontSize: 22.0,
       );
-  String get titleMediumFamily => 'Inter';
-  TextStyle get titleMedium => GoogleFonts.getFont(
-        'Inter',
+  String get titleMediumFamily => 'Satoshi';
+  TextStyle get titleMedium => TextStyle(
+        fontFamily: 'Satoshi',
         color: theme.info,
-        fontWeight: FontWeight.w600,
+        fontWeight: FontWeight.normal,
         fontSize: 18.0,
       );
-  String get titleSmallFamily => 'Inter';
-  TextStyle get titleSmall => GoogleFonts.getFont(
-        'Inter',
+  String get titleSmallFamily => 'Satoshi';
+  TextStyle get titleSmall => TextStyle(
+        fontFamily: 'Satoshi',
         color: theme.info,
         fontWeight: FontWeight.w500,
         fontSize: 16.0,
       );
-  String get labelLargeFamily => 'Inter';
-  TextStyle get labelLarge => GoogleFonts.getFont(
-        'Inter',
+  String get labelLargeFamily => 'Satoshi';
+  TextStyle get labelLarge => TextStyle(
+        fontFamily: 'Satoshi',
         color: theme.secondaryText,
-        fontWeight: FontWeight.w500,
+        fontWeight: FontWeight.normal,
         fontSize: 16.0,
       );
-  String get labelMediumFamily => 'Inter';
-  TextStyle get labelMedium => GoogleFonts.getFont(
-        'Inter',
+  String get labelMediumFamily => 'Satoshi';
+  TextStyle get labelMedium => TextStyle(
+        fontFamily: 'Satoshi',
         color: theme.secondaryText,
-        fontWeight: FontWeight.w500,
+        fontWeight: FontWeight.normal,
         fontSize: 14.0,
       );
-  String get labelSmallFamily => 'Inter';
-  TextStyle get labelSmall => GoogleFonts.getFont(
-        'Inter',
+  String get labelSmallFamily => 'Satoshi';
+  TextStyle get labelSmall => TextStyle(
+        fontFamily: 'Satoshi',
         color: theme.secondaryText,
-        fontWeight: FontWeight.w500,
+        fontWeight: FontWeight.normal,
         fontSize: 12.0,
       );
-  String get bodyLargeFamily => 'Inter';
-  TextStyle get bodyLarge => GoogleFonts.getFont(
-        'Inter',
+  String get bodyLargeFamily => 'Satoshi';
+  TextStyle get bodyLarge => TextStyle(
+        fontFamily: 'Satoshi',
         color: theme.primaryText,
+        fontWeight: FontWeight.normal,
         fontSize: 16.0,
       );
-  String get bodyMediumFamily => 'Inter';
-  TextStyle get bodyMedium => GoogleFonts.getFont(
-        'Inter',
+  String get bodyMediumFamily => 'Satoshi';
+  TextStyle get bodyMedium => TextStyle(
+        fontFamily: 'Satoshi',
         color: theme.primaryText,
         fontWeight: FontWeight.normal,
         fontSize: 14.0,
       );
-  String get bodySmallFamily => 'Inter';
-  TextStyle get bodySmall => GoogleFonts.getFont(
-        'Inter',
+  String get bodySmallFamily => 'Satoshi';
+  TextStyle get bodySmall => TextStyle(
+        fontFamily: 'Satoshi',
         color: theme.primaryText,
         fontWeight: FontWeight.normal,
         fontSize: 12.0,
       );
 }
 
-class DarkModeTheme extends FlutterFlowTheme {
-  @Deprecated('Use primary instead')
-  Color get primaryColor => primary;
-  @Deprecated('Use secondary instead')
-  Color get secondaryColor => secondary;
-  @Deprecated('Use tertiary instead')
-  Color get tertiaryColor => tertiary;
+class TabletTypography extends Typography {
+  TabletTypography(this.theme);
 
-  late Color primary = const Color(0xFFDA242D);
-  late Color secondary = const Color(0xFFFF6A73);
-  late Color tertiary = const Color(0xFF0299FF);
-  late Color alternate = const Color(0xFF262D34);
-  late Color primaryText = const Color(0xFFFFFFFF);
-  late Color secondaryText = const Color(0xFFA5B0BE);
-  late Color primaryBackground = const Color(0xFF1A1F24);
-  late Color secondaryBackground = const Color(0xFF0F1316);
-  late Color accent1 = const Color(0x4CF83B46);
-  late Color accent2 = const Color(0x4CFF6A73);
-  late Color accent3 = const Color(0x4D0299FF);
-  late Color accent4 = const Color(0xB20B191E);
-  late Color success = const Color(0xFF6BBD78);
-  late Color warning = const Color(0xFFEC9C4B);
-  late Color error = const Color(0xFFF83B46);
-  late Color info = const Color(0xFFFFFFFF);
+  final FlutterFlowTheme theme;
+
+  String get displayLargeFamily => 'Satoshi';
+  TextStyle get displayLarge => TextStyle(
+        fontFamily: 'Satoshi',
+        color: theme.primaryText,
+        fontWeight: FontWeight.normal,
+        fontSize: 64.0,
+      );
+  String get displayMediumFamily => 'Satoshi';
+  TextStyle get displayMedium => TextStyle(
+        fontFamily: 'Satoshi',
+        color: theme.primaryText,
+        fontWeight: FontWeight.normal,
+        fontSize: 44.0,
+      );
+  String get displaySmallFamily => 'Satoshi';
+  TextStyle get displaySmall => TextStyle(
+        fontFamily: 'Satoshi',
+        color: theme.primaryText,
+        fontWeight: FontWeight.w600,
+        fontSize: 36.0,
+      );
+  String get headlineLargeFamily => 'Satoshi';
+  TextStyle get headlineLarge => TextStyle(
+        fontFamily: 'Satoshi',
+        color: theme.primaryText,
+        fontWeight: FontWeight.w600,
+        fontSize: 32.0,
+      );
+  String get headlineMediumFamily => 'Satoshi';
+  TextStyle get headlineMedium => TextStyle(
+        fontFamily: 'Satoshi',
+        color: theme.primaryText,
+        fontWeight: FontWeight.normal,
+        fontSize: 24.0,
+      );
+  String get headlineSmallFamily => 'Satoshi';
+  TextStyle get headlineSmall => TextStyle(
+        fontFamily: 'Satoshi',
+        color: theme.primaryText,
+        fontWeight: FontWeight.w500,
+        fontSize: 24.0,
+      );
+  String get titleLargeFamily => 'Satoshi';
+  TextStyle get titleLarge => TextStyle(
+        fontFamily: 'Satoshi',
+        color: theme.primaryText,
+        fontWeight: FontWeight.w500,
+        fontSize: 22.0,
+      );
+  String get titleMediumFamily => 'Satoshi';
+  TextStyle get titleMedium => TextStyle(
+        fontFamily: 'Satoshi',
+        color: theme.info,
+        fontWeight: FontWeight.normal,
+        fontSize: 18.0,
+      );
+  String get titleSmallFamily => 'Satoshi';
+  TextStyle get titleSmall => TextStyle(
+        fontFamily: 'Satoshi',
+        color: theme.info,
+        fontWeight: FontWeight.w500,
+        fontSize: 16.0,
+      );
+  String get labelLargeFamily => 'Satoshi';
+  TextStyle get labelLarge => TextStyle(
+        fontFamily: 'Satoshi',
+        color: theme.secondaryText,
+        fontWeight: FontWeight.normal,
+        fontSize: 16.0,
+      );
+  String get labelMediumFamily => 'Satoshi';
+  TextStyle get labelMedium => TextStyle(
+        fontFamily: 'Satoshi',
+        color: theme.secondaryText,
+        fontWeight: FontWeight.normal,
+        fontSize: 14.0,
+      );
+  String get labelSmallFamily => 'Satoshi';
+  TextStyle get labelSmall => TextStyle(
+        fontFamily: 'Satoshi',
+        color: theme.secondaryText,
+        fontWeight: FontWeight.normal,
+        fontSize: 12.0,
+      );
+  String get bodyLargeFamily => 'Satoshi';
+  TextStyle get bodyLarge => TextStyle(
+        fontFamily: 'Satoshi',
+        color: theme.primaryText,
+        fontWeight: FontWeight.normal,
+        fontSize: 16.0,
+      );
+  String get bodyMediumFamily => 'Satoshi';
+  TextStyle get bodyMedium => TextStyle(
+        fontFamily: 'Satoshi',
+        color: theme.primaryText,
+        fontWeight: FontWeight.normal,
+        fontSize: 14.0,
+      );
+  String get bodySmallFamily => 'Satoshi';
+  TextStyle get bodySmall => TextStyle(
+        fontFamily: 'Satoshi',
+        color: theme.primaryText,
+        fontWeight: FontWeight.normal,
+        fontSize: 12.0,
+      );
+}
+
+class DesktopTypography extends Typography {
+  DesktopTypography(this.theme);
+
+  final FlutterFlowTheme theme;
+
+  String get displayLargeFamily => 'Satoshi';
+  TextStyle get displayLarge => TextStyle(
+        fontFamily: 'Satoshi',
+        color: theme.primaryText,
+        fontWeight: FontWeight.normal,
+        fontSize: 64.0,
+      );
+  String get displayMediumFamily => 'Satoshi';
+  TextStyle get displayMedium => TextStyle(
+        fontFamily: 'Satoshi',
+        color: theme.primaryText,
+        fontWeight: FontWeight.normal,
+        fontSize: 44.0,
+      );
+  String get displaySmallFamily => 'Satoshi';
+  TextStyle get displaySmall => TextStyle(
+        fontFamily: 'Satoshi',
+        color: theme.primaryText,
+        fontWeight: FontWeight.w600,
+        fontSize: 36.0,
+      );
+  String get headlineLargeFamily => 'Satoshi';
+  TextStyle get headlineLarge => TextStyle(
+        fontFamily: 'Satoshi',
+        color: theme.primaryText,
+        fontWeight: FontWeight.w600,
+        fontSize: 32.0,
+      );
+  String get headlineMediumFamily => 'Satoshi';
+  TextStyle get headlineMedium => TextStyle(
+        fontFamily: 'Satoshi',
+        color: theme.primaryText,
+        fontWeight: FontWeight.normal,
+        fontSize: 24.0,
+      );
+  String get headlineSmallFamily => 'Satoshi';
+  TextStyle get headlineSmall => TextStyle(
+        fontFamily: 'Satoshi',
+        color: theme.primaryText,
+        fontWeight: FontWeight.w500,
+        fontSize: 24.0,
+      );
+  String get titleLargeFamily => 'Satoshi';
+  TextStyle get titleLarge => TextStyle(
+        fontFamily: 'Satoshi',
+        color: theme.primaryText,
+        fontWeight: FontWeight.w500,
+        fontSize: 22.0,
+      );
+  String get titleMediumFamily => 'Satoshi';
+  TextStyle get titleMedium => TextStyle(
+        fontFamily: 'Satoshi',
+        color: theme.info,
+        fontWeight: FontWeight.normal,
+        fontSize: 18.0,
+      );
+  String get titleSmallFamily => 'Satoshi';
+  TextStyle get titleSmall => TextStyle(
+        fontFamily: 'Satoshi',
+        color: theme.info,
+        fontWeight: FontWeight.w500,
+        fontSize: 16.0,
+      );
+  String get labelLargeFamily => 'Satoshi';
+  TextStyle get labelLarge => TextStyle(
+        fontFamily: 'Satoshi',
+        color: theme.secondaryText,
+        fontWeight: FontWeight.normal,
+        fontSize: 16.0,
+      );
+  String get labelMediumFamily => 'Satoshi';
+  TextStyle get labelMedium => TextStyle(
+        fontFamily: 'Satoshi',
+        color: theme.secondaryText,
+        fontWeight: FontWeight.normal,
+        fontSize: 14.0,
+      );
+  String get labelSmallFamily => 'Satoshi';
+  TextStyle get labelSmall => TextStyle(
+        fontFamily: 'Satoshi',
+        color: theme.secondaryText,
+        fontWeight: FontWeight.normal,
+        fontSize: 12.0,
+      );
+  String get bodyLargeFamily => 'Satoshi';
+  TextStyle get bodyLarge => TextStyle(
+        fontFamily: 'Satoshi',
+        color: theme.primaryText,
+        fontWeight: FontWeight.normal,
+        fontSize: 16.0,
+      );
+  String get bodyMediumFamily => 'Satoshi';
+  TextStyle get bodyMedium => TextStyle(
+        fontFamily: 'Satoshi',
+        color: theme.primaryText,
+        fontWeight: FontWeight.normal,
+        fontSize: 14.0,
+      );
+  String get bodySmallFamily => 'Satoshi';
+  TextStyle get bodySmall => TextStyle(
+        fontFamily: 'Satoshi',
+        color: theme.primaryText,
+        fontWeight: FontWeight.normal,
+        fontSize: 12.0,
+      );
 }
 
 extension TextStyleHelper on TextStyle {

@@ -5,8 +5,8 @@ import '../base_auth_user_provider.dart';
 
 export '../base_auth_user_provider.dart';
 
-class GentooTrailFirebaseUser extends BaseAuthUser {
-  GentooTrailFirebaseUser(this.user);
+class GentooDemoFirebaseUser extends BaseAuthUser {
+  GentooDemoFirebaseUser(this.user);
   User? user;
   @override
   bool get loggedIn => user != null;
@@ -60,17 +60,17 @@ class GentooTrailFirebaseUser extends BaseAuthUser {
   static BaseAuthUser fromUserCredential(UserCredential userCredential) =>
       fromFirebaseUser(userCredential.user);
   static BaseAuthUser fromFirebaseUser(User? user) =>
-      GentooTrailFirebaseUser(user);
+      GentooDemoFirebaseUser(user);
 }
 
-Stream<BaseAuthUser> gentooTrailFirebaseUserStream() => FirebaseAuth.instance
+Stream<BaseAuthUser> gentooDemoFirebaseUserStream() => FirebaseAuth.instance
         .authStateChanges()
         .debounce((user) => user == null && !loggedIn
             ? TimerStream(true, const Duration(seconds: 1))
             : Stream.value(user))
         .map<BaseAuthUser>(
       (user) {
-        currentUser = GentooTrailFirebaseUser(user);
+        currentUser = GentooDemoFirebaseUser(user);
         return currentUser!;
       },
     );

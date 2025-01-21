@@ -1,4 +1,4 @@
-package com.mycompany.gentoodelivery
+package Gentoo.Demo
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -6,7 +6,7 @@ import '../flutter_flow/flutter_flow_util.dart';
 import 'schema/util/firestore_util.dart';
 
 import 'schema/users_record.dart';
-import 'schema/shipping_record.dart';
+import 'schema/address_record.dart';
 
 export 'dart:async' show StreamSubscription;
 export 'package:cloud_firestore/cloud_firestore.dart' hide Order;
@@ -16,7 +16,7 @@ export 'schema/util/firestore_util.dart';
 export 'schema/util/schema_util.dart';
 
 export 'schema/users_record.dart';
-export 'schema/shipping_record.dart';
+export 'schema/address_record.dart';
 
 /// Functions to query UsersRecords (as a Stream and as a Future).
 Future<int> queryUsersRecordCount({
@@ -55,38 +55,38 @@ Future<List<UsersRecord>> queryUsersRecordOnce({
       singleRecord: singleRecord,
     );
 
-/// Functions to query ShippingRecords (as a Stream and as a Future).
-Future<int> queryShippingRecordCount({
+/// Functions to query AddressRecords (as a Stream and as a Future).
+Future<int> queryAddressRecordCount({
   Query Function(Query)? queryBuilder,
   int limit = -1,
 }) =>
     queryCollectionCount(
-      ShippingRecord.collection,
+      AddressRecord.collection,
       queryBuilder: queryBuilder,
       limit: limit,
     );
 
-Stream<List<ShippingRecord>> queryShippingRecord({
+Stream<List<AddressRecord>> queryAddressRecord({
   Query Function(Query)? queryBuilder,
   int limit = -1,
   bool singleRecord = false,
 }) =>
     queryCollection(
-      ShippingRecord.collection,
-      ShippingRecord.fromSnapshot,
+      AddressRecord.collection,
+      AddressRecord.fromSnapshot,
       queryBuilder: queryBuilder,
       limit: limit,
       singleRecord: singleRecord,
     );
 
-Future<List<ShippingRecord>> queryShippingRecordOnce({
+Future<List<AddressRecord>> queryAddressRecordOnce({
   Query Function(Query)? queryBuilder,
   int limit = -1,
   bool singleRecord = false,
 }) =>
     queryCollectionOnce(
-      ShippingRecord.collection,
-      ShippingRecord.fromSnapshot,
+      AddressRecord.collection,
+      AddressRecord.fromSnapshot,
       queryBuilder: queryBuilder,
       limit: limit,
       singleRecord: singleRecord,
@@ -229,14 +229,14 @@ Future<FFFirestorePage<T>> queryCollectionPage<T>(
 
 // Creates a Firestore document representing the logged in user if it doesn't yet exist
 Future maybeCreateUser(User user) async {
-  final userRecord = UsersRecord.collection.doc(user.uid);
+  final userRecord = AddressRecord.collection.doc(user.uid);
   final userExists = await userRecord.get().then((u) => u.exists);
   if (userExists) {
-    currentUserDocument = await UsersRecord.getDocumentOnce(userRecord);
+    currentUserDocument = await AddressRecord.getDocumentOnce(userRecord);
     return;
   }
 
-  final userData = createUsersRecordData(
+  final userData = createAddressRecordData(
     email: user.email ??
         FirebaseAuth.instance.currentUser?.email ??
         user.providerData.firstOrNull?.email,
@@ -249,10 +249,10 @@ Future maybeCreateUser(User user) async {
   );
 
   await userRecord.set(userData);
-  currentUserDocument = UsersRecord.getDocumentFromData(userData, userRecord);
+  currentUserDocument = AddressRecord.getDocumentFromData(userData, userRecord);
 }
 
 Future updateUserDocument({String? email}) async {
   await currentUserDocument?.reference
-      .update(createUsersRecordData(email: email));
+      .update(createAddressRecordData(email: email));
 }
